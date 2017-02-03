@@ -1,0 +1,4 @@
+*.sublime-*
+bower_components/**
+*.sublime-project
+build/**

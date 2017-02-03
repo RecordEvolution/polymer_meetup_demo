@@ -1,0 +1,86 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<script src="../../bower_components/autobahnjs/autobahn.js"></script>
+
+
+
+
+<dom-module id="cb-connect">
+
+
+  <script>
+    Polymer({
+
+      is: 'cb-connect',
+
+      properties: {
+        wsuri: {
+          type: String,
+          value: 'ws://localhost:8099/ws'
+        },
+        realm: {
+          type: String,
+          value: 'realm1'
+        }
+      },
+
+      attached: function() {
+
+        var me = this;
+
+
+        // if (document.location.origin == "file://") {
+        //         wsuri = "ws://127.0.0.1:8080/ws";
+        //     } else {
+        //         if (document.location.hostname == '192.168.99.101') {
+        //             console.log("served from inside minikube");
+        //             var wsuri2 = (document.location.protocol === "http:" ? "ws:" : "wss:") + "//" +
+        //                 "192.168.99.101:31245/ws";
+        //             console.log(" " + wsuri2);
+        //             wsuri = wsuri2;
+        //         } else if (document.location.hostname == 'localhost') {
+        //             console.log("served from localhost");
+        //             var wsuri2 = (document.location.protocol === "http:" ? "ws:" : "wss:") + "//" +
+        //                 "192.168.99.101:31245/ws";
+        //             console.log(" " + wsuri2);
+        //             wsuri = wsuri2;
+        //         } else {
+        //             console.log("served from cloud");
+        //              wsuri = (document.location.protocol === "http:" ? "ws:" : "wss:") + "//" +
+        //                          "104.199.76.81:8080" + "/ws";
+        //         }
+        //     }
+
+
+
+        var establishConnection = function() {
+
+            // the WAMP connection to the Router
+            //
+            var connection = new autobahn.Connection({
+               url: me.wsuri,
+               realm: me.realm
+            });
+
+            // fired when connection is established and session attached
+            //
+            connection.onopen = function (session, details) {
+                console.log("Connected to crossbar router");
+                absession = session;
+
+                me.fire('crossbar-connected', session, {node: document.querySelector('main-page')});
+
+            };
+
+            connection.onclose = function (reason, details) {
+                console.log('not Connected, reason:', reason, details);
+            };
+
+            connection.open();
+        }
+
+        establishConnection();        
+      }
+
+    });
+  </script>
+</dom-module>

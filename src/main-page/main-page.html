@@ -1,0 +1,222 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/font-roboto/roboto.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/paper-header-panel/paper-header-panel.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../answer-box/answer-box.html">
+<link rel="import" href="../cb-connect/cb-connect.html">
+
+
+
+<dom-module id="main-page">
+  <template>
+    <style include="iron-flex iron-flex-alignment iron-positioning iron-flex-factors">
+      :host {
+        display: block;
+        font-family: roboto;
+      }
+
+      .paper-header {
+        background: #38525f;
+        height: 100px;
+      }
+
+      .pink .content {
+        background: linear-gradient(white, #f8bbd0);
+      }
+
+      #title {
+        color: #ffbe2c;
+        font-size: 30px;
+        margin-left: 50px;
+        font-weight: 500;
+      }
+
+      .content {
+        margin-left: 50px;
+        margin-right: 50px;
+        margin-bottom: 20px;
+        margin-top: 20px;
+      }
+
+    </style>
+
+    <cb-connect></cb-connect>
+
+    <div class="layout vertical fit">
+
+      <paper-header-panel  mode="standard">
+        <div class="paper-header layout horizontal center">
+
+        <div id="title"> Polymer Meetup Quiz </div>
+        <div class="flex"> </div>
+          <iron-image src="../../images/RE_Logo_2016-Blau-negativ-01.svg" style="width: 200px; height: 40px; margin-top: 15px; margin-right: 50px;"></iron-image>
+
+        </div>
+
+        <div class="content vertical layout">
+
+        
+
+          <div class="layout horizontal">
+            <div class="flex"></div> <div class="flex-4"><h2> Answers given </h2></div> <div class="flex"></div>
+          </div>
+
+
+        <div id="insertpoint"></div>
+
+
+        </div>
+
+      </paper-header-panel>
+
+    </div>
+
+
+
+
+
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'main-page',
+
+      properties: {
+        userList: {
+          type: Array,
+          value: function() {return [];}
+        },
+        eventList: {
+          type: Array,
+          value: function() {return [];}
+        },
+        answers: {
+          type: Array,
+          value: function() {
+            return [
+              {id: 1234, answer: 'yes'},
+              {id: 5678, answer: 'no'}
+            ];
+          }
+        }
+      },
+
+      listeners: {
+        'crossbar-connected': 'subscribe'
+      },
+
+      subscribe: function(e) {
+
+        e.detail.subscribe('re.meetup.answer', this.answerReceived.bind(this));
+        absession = e.detail; // zum testen
+        
+      },
+
+// absession.publish('re.meetup.answer', [{user: 'philipp', answer: 'yes', id: '12j2g4vf8hs'}]);
+
+
+    answerReceived: function(args) {
+      var newQuestion = [];
+      var newUser = [];
+
+      console.log("Got event:", args[0]);
+
+      if (typeof args[0].user === 'undefined' || typeof args[0].answer === 'undefined' || typeof args[0].id === 'undefined') {
+        console.log('wrong data format received');
+        return false;
+      }
+
+      newUser = this.userList.filter(function(d) {
+        if (d === args[0].user) {
+          return true;
+        }
+      });
+
+      //check if new user
+      if (newUser.length === 0) {
+        console.log('new user', args[0].user);
+
+        // add entry if answer is correct
+        if (this.checkAnswer(args[0].id, args[0].answer)) {
+          console.log('add entry');
+          this.addEntry(args[0].user);
+          this.userList.push(args[0].user);
+        }
+      } else {
+        console.log('not implemented yet');
+        // at this point the user already has at least one correct answer
+        // you have to check now, if he has an correct answer to a new question
+        newQuestion = this.eventList.filter(function(d){
+          if (d.user == args[0].user && d.id == args[0].id && d.answer == args[0].answer) {
+            return true;
+          }
+        });
+
+        if (newQuestion.length === 0) {
+          console.log('user has answered a new question');
+          if(this.checkAnswer(args[0].id, args[0].answer)) {
+            console.log('add 1 successfully answered question');
+            this.incrementEntry(args[0].user);
+
+          } 
+
+        } else {
+          console.log('question has already been answered');
+        }
+
+      }
+
+      // historize event
+      this.eventList.push(args[0]);
+
+    },
+
+    checkAnswer: function(id, answer) {
+      // get answer by id
+      var currentAnswer = this.answers.filter(function(d){
+        if (d.id == id) {
+          return true
+        }
+      });
+
+      // check if id exists
+      if (currentAnswer.length === 0) {
+        console.log('wrong id send');
+        return false;
+      }
+
+      // check if answer is correct
+      if (currentAnswer[0].answer === answer) {
+        console.log('answer is correct');
+        return true;
+      } else {
+        console.log('answer is wrong');
+        return false;
+      }
+
+    },
+
+    addEntry: function(userName) {
+      var me = this;
+      var dynamicEl = document.createElement('answer-box');
+      dynamicEl.user = userName;
+      dynamicEl.numberCorrectAnswers = 1;
+      dynamicEl.id = userName;
+      // dynamicEl.customStyle['---box-color'] = me.colorSchema[me.userList.indexOf(args[1]) + 1];
+      // dynamicEl.updateStyles();
+      console.log('dynamicEl', dynamicEl);
+      // Polymer.dom(me.root).insertBefore(dynamicEl, me.$.insertpoint);
+      this.$.insertpoint.appendChild(dynamicEl);
+
+    },
+
+    incrementEntry: function(userName) {
+      this.$$('#' + userName).numberCorrectAnswers = this.$$('#' + userName).numberCorrectAnswers + 1;
+    }
+
+    });
+  </script>
+</dom-module>

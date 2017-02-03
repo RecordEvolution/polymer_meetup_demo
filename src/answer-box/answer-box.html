@@ -1,0 +1,74 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+
+<!--
+`answer-box`
+
+
+@demo demo/index.html 
+-->
+
+<dom-module id="answer-box">
+  <template>
+    <style include="iron-flex iron-flex-alignment iron-positioning iron-flex-factors">
+      :host {
+        display: block;
+        margin-bottom: 10px;
+      }
+
+    </style>
+    
+    <div class="layout horizontal">
+      <div class="flex"></div> 
+      <div class="flex-4">
+
+        <paper-material elevation="2">
+          <div class="layout horizontal" style="padding-top: 15px; padding-bottom: 15px; padding-right: 10px; padding-left: 10px;">
+            <div style="margin-right: 3px;">[[user]]</div> 
+            <div class="flex"></div>
+            <div>has [[numberCorrectAnswers]] correct [[plural]]</div>
+          </div>
+        </paper-material>
+
+      </div> 
+      <div class="flex"></div>
+    </div>
+
+
+
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'answer-box',
+
+      properties: {
+        user: {
+          type: String,
+          value: 'Name',
+        },
+        numberCorrectAnswers: {
+          type: Number,
+          value: 0,
+          observer: 'numberCorrectAnswersChanged'
+        },
+        plural: {
+          type: String,
+          value: 'answers'
+        }
+      },
+
+      numberCorrectAnswersChanged: function() {
+        if (this.numberCorrectAnswers === 1) {
+          this.plural = 'answer';
+        } else {
+          this.plural = 'answers';
+        }
+      }
+
+    });
+  </script>
+</dom-module>
