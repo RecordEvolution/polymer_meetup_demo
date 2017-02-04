@@ -119,7 +119,7 @@
             e.detail.call('wamp.subscription.get_events', [sub.id, 10000]).then(
                function (history) {
                   console.log("got history for " + history.length + " events");
-                  for (var i = 0; i < history.length; ++i) {
+                  for (var i = history.length - 1; i > -1; --i) {
                      var evt = history[i];
                      me.answerReceived(evt.args);
                      console.log(evt.timestamp, evt.publication, evt.args[0]);
@@ -169,26 +169,26 @@
           this.push('itemList', 
             {
               user: args[0].user,
-              id: args[0].id,
-              answer: args[0].answer,
+              ids: [args[0].id],
               numCorrect: 1
             }
           );
         }
       } else {
+        console.log('user exists', newUser);
         // at this point the user already has at least one correct answer
         // you have to check now, if he has an correct answer to a new question
-        newQuestion = this.itemList.filter(function(d){
-          if (d.user == args[0].user && d.id == args[0].id && d.answer == args[0].answer) {
+        newQuestion = newUser[0].ids.filter(function(d){
+          if (d == args[0].id) {
             return true;
           }
         });
 
         if (newQuestion.length === 0) {
-          console.log('user has answered a new question');
+          console.log('user has answered a new question', newQuestion);
           if(this.checkAnswer(args[0].id, args[0].answer)) {
             console.log('add 1 successfully answered question');
-            this.incrementEntry(args[0].user);
+            this.incrementEntry(args[0].user, args[0].id);
 
           } 
 
@@ -226,10 +226,12 @@
 
     },
 
-    incrementEntry: function(userName) {
+    incrementEntry: function(userName, questionId) {
       var newArray = this.itemList.map(function(d) {
         if (d.user === userName) {
-          return {user: d.user, id: d.id, answer: d.answer, numCorrect: d.numCorrect + 1};
+          var arr = d.ids.slice();
+          arr.push(questionId);
+          return {user: d.user, ids: arr, numCorrect: d.numCorrect + 1};
         } else {
           return d;
         }
