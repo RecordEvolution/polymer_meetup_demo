@@ -1,0 +1,17 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/main-page/main-page.html",
+  "fragments": [
+    "src/cb-connect/cb-connect.html",
+    "src/answer-box/answer-box.html"
+  ],
+  "sources": [
+    "src/**/*",
+    "fonts/**/*",
+    "images/**/*"
+  ],
+    "includeDependencies": [
+    "bower_components/webcomponentsjs/webcomponents-lite.min.js",
+    "font-face.css"
+  ]
+}

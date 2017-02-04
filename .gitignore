@@ -2,3 +2,4 @@
 bower_components/**
 *.sublime-project
 build/**
+.crossbar/node.pid

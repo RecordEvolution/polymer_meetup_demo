@@ -22,9 +22,6 @@
         height: 100px;
       }
 
-      .pink .content {
-        background: linear-gradient(white, #f8bbd0);
-      }
 
       #title {
         color: #ffbe2c;
@@ -64,7 +61,9 @@
           </div>
 
 
-        <div id="insertpoint"></div>
+          <template is="dom-repeat" items="{{itemList}}">
+            <answer-box user="[[item.user]]" number-correct-answers="[[item.numCorrect]]"></answer-box>
+          </template>
 
 
         </div>
@@ -85,11 +84,7 @@
       is: 'main-page',
 
       properties: {
-        userList: {
-          type: Array,
-          value: function() {return [];}
-        },
-        eventList: {
+        itemList: {
           type: Array,
           value: function() {return [];}
         },
@@ -109,8 +104,37 @@
       },
 
       subscribe: function(e) {
+        var me = this;
 
-        e.detail.subscribe('re.meetup.answer', this.answerReceived.bind(this));
+        e.detail.subscribe(
+                            're.meetup.answer', 
+                            this.answerReceived.bind(this), 
+                            {match: 'exact'}
+        ).then(
+
+          function (sub) {
+            console.log("subscribed with subscription ID " + sub.id);
+            // get event history of length 20 on given subscription
+            //
+            e.detail.call('wamp.subscription.get_events', [sub.id, 10000]).then(
+               function (history) {
+                  console.log("got history for " + history.length + " events");
+                  for (var i = 0; i < history.length; ++i) {
+                     var evt = history[i];
+                     me.answerReceived(evt.args);
+                     console.log(evt.timestamp, evt.publication, evt.args[0]);
+                  }
+               },
+               function (err) {
+                  console.log("could not retrieve event history", err);
+               }
+            );
+          },
+          function (err) {
+            console.log("could not subscribe", err);
+          }
+        );
+
         absession = e.detail; // zum testen
         
       },
@@ -129,8 +153,8 @@
         return false;
       }
 
-      newUser = this.userList.filter(function(d) {
-        if (d === args[0].user) {
+      newUser = this.itemList.filter(function(d) {
+        if (d.user === args[0].user) {
           return true;
         }
       });
@@ -142,14 +166,19 @@
         // add entry if answer is correct
         if (this.checkAnswer(args[0].id, args[0].answer)) {
           console.log('add entry');
-          this.addEntry(args[0].user);
-          this.userList.push(args[0].user);
+          this.push('itemList', 
+            {
+              user: args[0].user,
+              id: args[0].id,
+              answer: args[0].answer,
+              numCorrect: 1
+            }
+          );
         }
       } else {
-        console.log('not implemented yet');
         // at this point the user already has at least one correct answer
         // you have to check now, if he has an correct answer to a new question
-        newQuestion = this.eventList.filter(function(d){
+        newQuestion = this.itemList.filter(function(d){
           if (d.user == args[0].user && d.id == args[0].id && d.answer == args[0].answer) {
             return true;
           }
@@ -169,8 +198,6 @@
 
       }
 
-      // historize event
-      this.eventList.push(args[0]);
 
     },
 
@@ -199,22 +226,16 @@
 
     },
 
-    addEntry: function(userName) {
-      var me = this;
-      var dynamicEl = document.createElement('answer-box');
-      dynamicEl.user = userName;
-      dynamicEl.numberCorrectAnswers = 1;
-      dynamicEl.id = userName;
-      // dynamicEl.customStyle['---box-color'] = me.colorSchema[me.userList.indexOf(args[1]) + 1];
-      // dynamicEl.updateStyles();
-      console.log('dynamicEl', dynamicEl);
-      // Polymer.dom(me.root).insertBefore(dynamicEl, me.$.insertpoint);
-      this.$.insertpoint.appendChild(dynamicEl);
-
-    },
-
     incrementEntry: function(userName) {
-      this.$$('#' + userName).numberCorrectAnswers = this.$$('#' + userName).numberCorrectAnswers + 1;
+      var newArray = this.itemList.map(function(d) {
+        if (d.user === userName) {
+          return {user: d.user, id: d.id, answer: d.answer, numCorrect: d.numCorrect + 1};
+        } else {
+          return d;
+        }
+      });
+
+      this.set('itemList', newArray);
     }
 
     });

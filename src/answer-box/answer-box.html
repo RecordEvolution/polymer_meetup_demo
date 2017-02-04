@@ -52,7 +52,6 @@
         },
         numberCorrectAnswers: {
           type: Number,
-          value: 0,
           observer: 'numberCorrectAnswersChanged'
         },
         plural: {
@@ -62,6 +61,7 @@
       },
 
       numberCorrectAnswersChanged: function() {
+        console.log('numberCorrectAnswersChanged', this.numberCorrectAnswers);
         if (this.numberCorrectAnswers === 1) {
           this.plural = 'answer';
         } else {

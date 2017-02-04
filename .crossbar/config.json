@@ -29,7 +29,17 @@
                                  }
                              ]
                          }
-                    ]
+                    ],
+                    "store": {
+                        "type": "memory",
+                        "event-history": [
+                            {
+                                "uri": "re.meetup.answer",
+                                "match": "exact",
+                                "limit": 10000
+                            }
+                        ]
+                    }
                 }
             ],
             "transports": [
