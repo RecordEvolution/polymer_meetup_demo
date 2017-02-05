@@ -3,7 +3,9 @@
   "shell": "src/main-page/main-page.html",
   "fragments": [
     "src/cb-connect/cb-connect.html",
-    "src/answer-box/answer-box.html"
+    "src/answer-box/answer-box.html",
+    "src/custom-transformations/color-animation.html",
+    "src/custom-transformations/slide-from-left-color-animation.html"
   ],
   "sources": [
     "src/**/*",
@@ -11,7 +13,9 @@
     "images/**/*"
   ],
     "includeDependencies": [
-    "bower_components/webcomponentsjs/webcomponents-lite.min.js",
-    "font-face.css"
+    "bower_components/webcomponentsjs/webcomponents-lite.js",
+    "font-face.css",
+    "manifest.json",
+    "bower.json"
   ]
 }
