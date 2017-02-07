@@ -91,8 +91,8 @@
           type: Array,
           value: function() {
             return [
-              {id: 1234, answer: 'yes'},
-              {id: 5678, answer: 'no'}
+              {id: '1p43n242jx', answer: 'paper-spinner'},
+              {id: '4kjhs34j43', answer: 'bower'}
             ];
           }
         }
@@ -203,6 +203,7 @@
     checkAnswer: function(id, answer) {
       // get answer by id
       var currentAnswer = this.answers.filter(function(d){
+        // console.log('check', d.id, id, d.id == id, d.id === id);
         if (d.id == id) {
           return true
         }

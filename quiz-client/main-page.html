@@ -1,0 +1,165 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/font-roboto/roboto.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/paper-header-panel/paper-header-panel.html">
+<link rel="import" href="../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../src/cb-connect/cb-connect.html">
+
+
+
+<dom-module id="main-page">
+  <template>
+    <style include="iron-flex iron-flex-alignment iron-positioning iron-flex-factors">
+      :host {
+        display: block;
+        font-family: roboto;
+      }
+
+      .paper-header {
+        background: #38525f;
+        height: 100px;
+      }
+
+
+      #title {
+        color: #ffbe2c;
+        font-size: 30px;
+        margin-left: 50px;
+        font-weight: 500;
+      }
+
+      .content {
+        margin-left: 50px;
+        margin-right: 50px;
+        /*margin-bottom: 20px;*/
+        /*margin-top: 20px;*/
+      }
+
+      #panel {
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        margin-bottom: 80px;
+      }
+
+      paper-button {
+        color: #38525f;
+        background: #ffbe2c;
+        margin-top: 10px;
+      }
+
+      paper-input {
+        --paper-input-container-focus-color: #ffbe2c;
+      }
+
+    </style>
+
+    <cb-connect></cb-connect>
+
+    <div class="layout vertical fit">
+
+      <paper-header-panel  mode="standard">
+        <div class="paper-header layout horizontal center">
+
+          <div id="title"> Polymer Meetup Quiz </div>
+          <div class="flex"> </div>
+          <iron-image src="../../images/RE_Logo_2016-Blau-negativ-01.svg" style="width: 200px; height: 40px; margin-top: 15px; margin-right: 50px;"></iron-image>
+
+        </div>
+        <div class="content vertical layout" style="height: 100%;">
+
+
+          <div class="layout horizontal center" style="height: 100%;">
+            <div class="flex"></div> 
+              
+            <paper-material elevation="2" id="panel" class="flex-4">
+              <h3>[[question]]</h3>
+              <paper-input 
+                            id="pinput" 
+                            label="answer" 
+                            required 
+                            auto-validated 
+                            error-message="answer required">
+                                                              </paper-input>
+
+              <div class="horizontal end-justified layout">
+                <paper-button on-tap="submitAnswer">send</paper-button>
+              </div>
+            </paper-material>
+
+            <div class="flex"></div>
+          </div>
+
+
+        </div>
+      </paper-header-panel>
+
+    </div>
+
+
+
+
+
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'main-page',
+
+      properties: {
+        question: {
+          type: String,
+          value: ''
+        },
+        questionId: {
+          type: String,
+          value: ''
+        }
+      },
+
+      listeners: {
+        'crossbar-connected': 'subscribe'
+      },
+
+      subscribe: function(e) {
+        console.log('subscribe');
+        var me = this;
+
+        e.detail.subscribe('re.meetup.question', function(res) {
+          console.log('just received', res[0]);
+          me.question = res[0].question;
+          me.questionId = res[0].id;
+        });
+        
+      },
+
+      submitAnswer: function() {
+        if(this.$.pinput.validate()) {
+          console.log('submitAnswer');
+
+          absession.publish('re.meetup.answer', 
+            [{
+              // user: 'RECORD.evolution',
+              user: 'Philipp',
+              id: this.questionId,
+              answer: this.$.pinput.value
+              }]
+          );
+          this.$.pinput.value = '';
+        } else {
+          this.$.invalid = true;
+        }
+
+      }
+
+// absession.publish('re.meetup.answer', [{user: 'philipp', answer: 'yes', id: '12j2g4vf8hs'}]);
+
+
+    });
+  </script>
+</dom-module>
