@@ -6,7 +6,10 @@
 <link rel="import" href="../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animation-runner-behavior.html">
 <link rel="import" href="../src/cb-connect/cb-connect.html">
+<link rel="import" href="../src/custom-transformations/color-animation.html">
+
 
 
 
@@ -34,8 +37,7 @@
       .content {
         margin-left: 50px;
         margin-right: 50px;
-        /*margin-bottom: 20px;*/
-        /*margin-top: 20px;*/
+
       }
 
       #panel {
@@ -77,7 +79,7 @@
             <div class="flex"></div> 
               
             <paper-material elevation="2" id="panel" class="flex-4">
-              <h3>[[question]]</h3>
+              <h3 id="toAnimate">[[question]]</h3>
               <paper-input 
                             id="pinput" 
                             label="answer" 
@@ -114,24 +116,40 @@
       properties: {
         question: {
           type: String,
-          value: ''
+          value: '',
+          observer: 'startAnimation'
         },
         questionId: {
           type: String,
           value: ''
+        },
+        animationConfig: {
+          value: function() {
+            return {
+              'change': {
+                name: 'color-animation',
+                node: this.$.toAnimate,
+                timing: {duration: 2000}
+              }
+            }
+          }
         }
       },
+
+      behaviors: [
+        Polymer.NeonAnimationRunnerBehavior
+      ],
 
       listeners: {
         'crossbar-connected': 'subscribe'
       },
 
       subscribe: function(e) {
-        console.log('subscribe');
+        // console.log('subscribe');
         var me = this;
 
         e.detail.subscribe('re.meetup.question', function(res) {
-          console.log('just received', res[0]);
+          // console.log('just received', res[0]);
           me.question = res[0].question;
           me.questionId = res[0].id;
         });
@@ -140,12 +158,11 @@
 
       submitAnswer: function() {
         if(this.$.pinput.validate()) {
-          console.log('submitAnswer');
+          // console.log('submitAnswer');
 
           absession.publish('re.meetup.answer', 
             [{
-              // user: 'RECORD.evolution',
-              user: 'Philipp',
+              user: 'RECORD.evolution',
               id: this.questionId,
               answer: this.$.pinput.value
               }]
@@ -155,9 +172,14 @@
           this.$.invalid = true;
         }
 
+      },
+
+      startAnimation: function(newV, oldV) {
+        if (newV !== oldV) {
+          this.playAnimation('change');
+        }
       }
 
-// absession.publish('re.meetup.answer', [{user: 'philipp', answer: 'yes', id: '12j2g4vf8hs'}]);
 
 
     });

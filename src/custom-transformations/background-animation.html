@@ -32,7 +32,7 @@ Configuration:
 
   Polymer({
 
-    is: 'color-animation',
+    is: 'background-animation',
 
     behaviors: [
       Polymer.NeonAnimationBehavior
@@ -42,8 +42,8 @@ Configuration:
       var node = config.node;
 
       this._effect = new KeyframeEffect(node, [
-        {'color': '#ffbe2c'},
-        {'color': 'black'}
+        {'background': '#ffbe2c'},
+        {'background': 'white'}
       ], this.timingFromConfig(config));
 
       // if (config.transformOrigin) {
