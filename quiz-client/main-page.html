@@ -7,7 +7,6 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/neon-animation/neon-animation-runner-behavior.html">
-<link rel="import" href="../src/cb-connect/cb-connect.html">
 <link rel="import" href="../src/custom-transformations/color-animation.html">
 
 
@@ -59,8 +58,6 @@
       }
 
     </style>
-
-    <cb-connect></cb-connect>
 
     <div class="layout vertical fit">
 
@@ -133,6 +130,9 @@
               }
             }
           }
+        },
+        session: {
+          type: Object
         }
       },
 
@@ -154,13 +154,14 @@
           me.questionId = res[0].id;
         });
         
+        this.session = e.detail;
       },
 
       submitAnswer: function() {
         if(this.$.pinput.validate()) {
           // console.log('submitAnswer');
 
-          absession.publish('re.meetup.answer', 
+          this.session.publish('re.meetup.answer', 
             [{
               user: 'RECORD.evolution',
               id: this.questionId,

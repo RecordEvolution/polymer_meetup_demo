@@ -32,7 +32,8 @@ class AppSession(ApplicationSession):
         counter = 0
         questions = [
                         {'id': '4kjhs34j43', 'question': 'Which package manager is used to install Polymer elements?'},
-                        {'id': '1p43n242jx', 'question': 'Which Polymer Element can be used to visualize a pending state?'}
+                        {'id': '1p43n242jx', 'question': 'Which Polymer Element can be used to visualize a pending state?'},
+                        {'id': '498hff3h3k', 'question': 'last question?'}
                     ]
         while True:
 
@@ -44,8 +45,10 @@ class AppSession(ApplicationSession):
 
             if counter < 16:
                 yield self.publish('re.meetup.question', questions[0])
-            else:
+            elif counter < 32:
                 yield self.publish('re.meetup.question', questions[1])
+            else:
+                yield self.publish('re.meetup.question', questions[2])
 
 
 
@@ -64,5 +67,5 @@ class AppSession(ApplicationSession):
 
 if __name__ == '__main__':
    from autobahn.twisted.wamp import ApplicationRunner
-   runner = ApplicationRunner(url =u"ws://127.0.0.1:8099/ws", realm=u"realm1")
+   runner = ApplicationRunner(url =u"ws://127.0.0.1:8099/ws", realm=u"polymer_meetup")
    runner.run(AppSession)

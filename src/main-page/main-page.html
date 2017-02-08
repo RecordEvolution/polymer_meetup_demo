@@ -4,7 +4,6 @@
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/paper-header-panel/paper-header-panel.html">
 <link rel="import" href="../answer-box/answer-box.html">
-<link rel="import" href="../cb-connect/cb-connect.html">
 
 
 
@@ -37,8 +36,6 @@
       }
 
     </style>
-
-    <cb-connect></cb-connect>
 
     <div class="layout vertical fit">
 
@@ -92,7 +89,8 @@
           value: function() {
             return [
               {id: '1p43n242jx', answer: 'paper-spinner'},
-              {id: '4kjhs34j43', answer: 'bower'}
+              {id: '4kjhs34j43', answer: 'bower'},
+              {id: '498hff3h3k', answer: 'yes'}
             ];
           }
         }
@@ -139,104 +137,108 @@
       },
 
 
-    answerReceived: function(args) {
-      var newQuestion = [];
-      var newUser = [];
+      answerReceived: function(args) {
+        var newQuestion = [];
+        var newUser = [];
 
-      console.log("Got event:", args[0]);
+        console.log("Got event:", args[0]);
 
-      if (typeof args[0].user === 'undefined' || typeof args[0].answer === 'undefined' || typeof args[0].id === 'undefined') {
-        console.log('wrong data format received');
-        return false;
-      }
-
-      newUser = this.itemList.filter(function(d) {
-        if (d.user === args[0].user) {
-          return true;
+        if (typeof args[0].user === 'undefined' || typeof args[0].answer === 'undefined' || typeof args[0].id === 'undefined') {
+          console.log('wrong data format received');
+          return false;
         }
-      });
 
-      //check if new user
-      if (newUser.length === 0) {
-        console.log('new user', args[0].user);
-
-        // add entry if answer is correct
-        if (this.checkAnswer(args[0].id, args[0].answer)) {
-          console.log('add entry');
-          this.push('itemList', 
-            {
-              user: args[0].user,
-              ids: [args[0].id],
-              numCorrect: 1
-            }
-          );
-        }
-      } else {
-        console.log('user exists', newUser);
-        // at this point the user already has at least one correct answer
-        // you have to check now, if he has an correct answer to a new question
-        newQuestion = newUser[0].ids.filter(function(d){
-          if (d == args[0].id) {
+        newUser = this.itemList.filter(function(d) {
+          if (d.user === args[0].user) {
             return true;
           }
         });
 
-        if (newQuestion.length === 0) {
-          console.log('user has answered a new question', newQuestion);
-          if(this.checkAnswer(args[0].id, args[0].answer)) {
-            console.log('add 1 successfully answered question');
-            this.incrementEntry(args[0].user, args[0].id);
+        //check if new user
+        if (newUser.length === 0) {
+          console.log('new user', args[0].user);
 
-          } 
-
+          // add entry if answer is correct
+          if (this.checkAnswer(args[0].id, args[0].answer)) {
+            console.log('add entry');
+            this.push('itemList', 
+              {
+                user: args[0].user,
+                ids: [args[0].id],
+                numCorrect: 1
+              }
+            );
+          }
         } else {
-          console.log('question has already been answered');
+          console.log('user exists', newUser);
+          // at this point the user already has at least one correct answer
+          // you have to check now, if he has an correct answer to a new question
+          newQuestion = newUser[0].ids.filter(function(d){
+            if (d == args[0].id) {
+              return true;
+            }
+          });
+
+          if (newQuestion.length === 0) {
+            console.log('user has answered a new question', newQuestion);
+            if(this.checkAnswer(args[0].id, args[0].answer)) {
+              console.log('add 1 successfully answered question');
+              this.incrementEntry(args[0].user, args[0].id);
+
+            } 
+
+          } else {
+            console.log('question has already been answered');
+          }
+
         }
 
-      }
 
+      },
 
-    },
+      checkAnswer: function(id, answer) {
+        // get answer by id
+        var currentAnswer = this.answers.filter(function(d){
+          // console.log('check', d.id, id, d.id == id, d.id === id);
+          if (d.id == id) {
+            return true
+          }
+        });
 
-    checkAnswer: function(id, answer) {
-      // get answer by id
-      var currentAnswer = this.answers.filter(function(d){
-        // console.log('check', d.id, id, d.id == id, d.id === id);
-        if (d.id == id) {
-          return true
+        // check if id exists
+        if (currentAnswer.length === 0) {
+          console.log('wrong id send');
+          return false;
         }
-      });
 
-      // check if id exists
-      if (currentAnswer.length === 0) {
-        console.log('wrong id send');
-        return false;
-      }
-
-      // check if answer is correct
-      if (currentAnswer[0].answer === answer) {
-        console.log('answer is correct');
-        return true;
-      } else {
-        console.log('answer is wrong');
-        return false;
-      }
-
-    },
-
-    incrementEntry: function(userName, questionId) {
-      var newArray = this.itemList.map(function(d) {
-        if (d.user === userName) {
-          var arr = d.ids.slice();
-          arr.push(questionId);
-          return {user: d.user, ids: arr, numCorrect: d.numCorrect + 1};
+        // check if answer is correct
+        if (currentAnswer[0].answer === answer) {
+          console.log('answer is correct');
+          return true;
         } else {
-          return d;
+          console.log('answer is wrong');
+          return false;
         }
-      });
 
-      this.set('itemList', newArray);
-    }
+      },
+
+      incrementEntry: function(userName, questionId) {
+        var newArray = this.itemList.map(function(d) {
+          if (d.user === userName) {
+            var arr = d.ids.slice();
+            arr.push(questionId);
+            return {user: d.user, ids: arr, numCorrect: d.numCorrect + 1};
+          } else {
+            return d;
+          }
+        });
+
+        this.set('itemList', this.sortList(newArray));
+      },
+
+      sortList: function(arg) {
+        return arg.sort(function(a, b){return b.numCorrect - a.numCorrect});
+      },
 
     });
   </script>

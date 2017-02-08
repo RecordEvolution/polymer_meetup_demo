@@ -1,7 +1,35 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <script src="../../bower_components/autobahnjs/autobahn.js"></script>
 
+<!--
+`cb-connect` is an element which connects to a [crossbar.io](http://crossbar.io) router.
+Simply add the `cb-connect` element to your index.html or custom element. As soon as the connection is established, `cb-connect` will fire an event, which contains the session details, to the target element.
 
+Example:
+
+    <cb-connect target-element="main-page"></cb-connect>
+    <main-page></main-page> 
+
+In the `main-page` element you can add an event listener:
+
+      Polymer({
+
+        is: 'main-page',
+
+        properties: {
+        },
+
+        listeners: {
+          'crossbar-connected': 'receivedEvent'
+        },
+
+        receivedEvent: function(e) {
+          console.log('received crossbar session object', e.detail);
+        }
+      });
+
+@demo demo/index.html 
+-->
 
 
 <dom-module id="cb-connect">
@@ -12,45 +40,37 @@
 
       is: 'cb-connect',
 
+      /**
+       * Fired to target element when connection to crossbar router is established
+       *
+       * @event crossbar-connected
+       */
+
       properties: {
+        //crossbar realm
+        realm: {
+          type: String,
+          value: 'polymer_meetup'
+        },
+        //websocket uri
         wsuri: {
           type: String,
           value: 'ws://localhost:8099/ws'
         },
-        realm: {
-          type: String,
-          value: 'realm1'
+        //target element which receives session event
+        targetElement: {
+          type: String
+        },
+        // crossbar session object
+        session: {
+          type: Object,
+          notify: true
         }
       },
 
       attached: function() {
 
         var me = this;
-
-
-        // if (document.location.origin == "file://") {
-        //         wsuri = "ws://127.0.0.1:8080/ws";
-        //     } else {
-        //         if (document.location.hostname == '192.168.99.101') {
-        //             console.log("served from inside minikube");
-        //             var wsuri2 = (document.location.protocol === "http:" ? "ws:" : "wss:") + "//" +
-        //                 "192.168.99.101:31245/ws";
-        //             console.log(" " + wsuri2);
-        //             wsuri = wsuri2;
-        //         } else if (document.location.hostname == 'localhost') {
-        //             console.log("served from localhost");
-        //             var wsuri2 = (document.location.protocol === "http:" ? "ws:" : "wss:") + "//" +
-        //                 "192.168.99.101:31245/ws";
-        //             console.log(" " + wsuri2);
-        //             wsuri = wsuri2;
-        //         } else {
-        //             console.log("served from cloud");
-        //              wsuri = (document.location.protocol === "http:" ? "ws:" : "wss:") + "//" +
-        //                          "104.199.76.81:8080" + "/ws";
-        //         }
-        //     }
-
-
 
         var establishConnection = function() {
 
@@ -65,9 +85,14 @@
             //
             connection.onopen = function (session, details) {
                 console.log("Connected to crossbar router");
-                absession = session;
+                // absession = session;
 
-                me.fire('crossbar-connected', session, {node: document.querySelector('main-page')});
+                if(me.targetElement) {
+                  console.log('event fired');
+                  me.fire('crossbar-connected', session, {node: document.querySelector('main-page')});
+                }
+
+                me.session = session;
 
             };
 
