@@ -1,10 +1,8 @@
 # How to start
 
-
-
 ## Get Polymer
 
-Create a new folder for your project. `cd` into it and install bower
+Create a new folder for your project. `cd` into it and install bower, if you haven't already done that.
 ```
 $ npm install -g bower
 ``` 
@@ -12,13 +10,11 @@ Create a bower.json file which handles your package dependencies
 ```
 $ bower init
 ``` 
-Now install Polymer
+Now install Polymer and some utility elements
 ```
 $ bower install --save Polymer
-``` 
-You can install other elements you might need (check out the element catalog)
-```
-$ bower install --save PolymerElements/paper-button
+$ bower install --save PolymerElements/paper-elements
+$ bower install --save PolymerElements/iron-elements
 ``` 
 If you discover problems installing, due to conncetion failures to github, try:
 ```
@@ -36,8 +32,36 @@ Now start a web server
 ```
 $ python -m SimpleHTTPServer
 ```
-[Here](localhost:8000/bower_components/cb-connect/) you can get a documentation of the cb-connect element.
+At localhost:8000/bower_components/cb-connect/ you can get a documentation of the cb-connect element.
+If you add this element to your project you need to set the websocket uri (wsuri property) and the realm.
+```html
+<cb-connect wsuri="ws://192.168.0.121:8099/ws" realm="polymer_meetup"></cb-connect>
+```
+
+This configuration should let you connect to our quiz channel.
+As pointed out in the `cb-connect` API reference, the element fires an event when connected and returns a session object. If you manage to collect this object you can publish and subscribe to certain topics.
+To receive quiz questions you need to subscribe to the topic: `re.meetup.question`
+
+```javascript
+// SUBSCRIBE to a topic to receive events
+function onQuestion(args) {
+   console.log("Got question:", args[0]);
+}
+session.subscribe('re.meetup.question', onQuestion);
+```
+
+You will then receive a question object, which contains the question and an id. Then you can send your answer by publishing an answer object to the topic `re.meetup.question`, which should have the following structure `{user: 'someone', answer: 'answer to the question', id=1234}`. The id should match the id collected from the question object and you should choose an unique user name.
+
+```javascript
+// PUBLISH an event
+var answerObject = {user: 'someone', answer: 'answer to the question', id=1234};
+session.publish('re.meetup.question', [answerObject]);
+```
+#### Further reading:
++ [crossbar.io](http://crossbar.io)
++ [autobahnJS](http://autobahn.ws/js/)
 
 ## Start developing
 
-Start by creating an index.html where you need to import the Polymer library. Then add the cb-connect element. Finaly write your own custom element, which can receive questions and submit answers. 
+Start by creating an index.html where you need to import the Polymer library. Then [build your own custom element](https://www.polymer-project.org/1.0/start/first-element/step-2) where you include the `cb-connection` element. Your application should display the questions we send and can submit answers. The [polymer element catalog](https://elements.polymer-project.org/) provides a lot of useful elements you can use, e.g. `paper-input` or `paper-button`. 
+

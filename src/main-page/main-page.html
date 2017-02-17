@@ -3,6 +3,7 @@
 <link rel="import" href="../../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../bower_components/paper-header-panel/paper-header-panel.html">
+<link rel="import" href="../../bower_components/cb-connect/cb-connect.html">
 <link rel="import" href="../answer-box/answer-box.html">
 
 
@@ -36,6 +37,11 @@
       }
 
     </style>
+
+    <cb-connect 
+          on-crossbar-connected="subscribe"
+          wsuri="ws://192.168.0.121:8099/ws"
+          realm="polymer_meetup"></cb-connect>
 
     <div class="layout vertical fit">
 
@@ -94,10 +100,6 @@
             ];
           }
         }
-      },
-
-      listeners: {
-        'crossbar-connected': 'subscribe'
       },
 
       subscribe: function(e) {
@@ -238,7 +240,7 @@
 
       sortList: function(arg) {
         return arg.sort(function(a, b){return b.numCorrect - a.numCorrect});
-      },
+      }
 
     });
   </script>

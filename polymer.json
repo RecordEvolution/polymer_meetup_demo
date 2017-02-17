@@ -2,7 +2,6 @@
   "entrypoint": "index.html",
   "shell": "src/main-page/main-page.html",
   "fragments": [
-    "src/cb-connect/cb-connect.html",
     "src/answer-box/answer-box.html",
     "src/custom-transformations/color-animation.html",
     "src/custom-transformations/slide-from-left-color-animation.html"

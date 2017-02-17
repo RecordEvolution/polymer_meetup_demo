@@ -7,6 +7,7 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="../bower_components/cb-connect/cb-connect.html">
 <link rel="import" href="../src/custom-transformations/color-animation.html">
 
 
@@ -58,6 +59,11 @@
       }
 
     </style>
+
+    <cb-connect 
+          on-crossbar-connected="subscribe"
+          wsuri="ws://192.168.0.121:8099/ws"
+          realm="polymer_meetup"></cb-connect>
 
     <div class="layout vertical fit">
 
@@ -139,10 +145,6 @@
       behaviors: [
         Polymer.NeonAnimationRunnerBehavior
       ],
-
-      listeners: {
-        'crossbar-connected': 'subscribe'
-      },
 
       subscribe: function(e) {
         // console.log('subscribe');
