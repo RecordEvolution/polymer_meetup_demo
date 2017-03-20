@@ -94,9 +94,16 @@
           type: Array,
           value: function() {
             return [
-              {id: '1p43n242jx', answer: 'paper-spinner'},
-              {id: '4kjhs34j43', answer: 'bower'},
-              {id: '498hff3h3k', answer: 'yes'}
+
+{id: '4kjhs34j43', answer: 'bower'},
+{id: '1p43n242jx', answer: 'paper-input'},
+{id: 'j2h4jhn2b4', answer: 'friday'},
+{id: '9qx3n85mpl', answer: '2'},
+{id: '10eumc4m4m', answer: 'dom-repeat'},
+{id: '0v3afl12o5', answer: '2012'},
+{id: '498hff3h3k', answer: 'yes'} 
+
+
             ];
           }
         }
@@ -145,7 +152,7 @@
 
         console.log("Got event:", args[0]);
 
-        if (typeof args[0].user === 'undefined' || typeof args[0].answer === 'undefined' || typeof args[0].id === 'undefined') {
+        if (typeof args[0].user === 'undefined' || typeof args[0].answer === 'undefined' || typeof args[0].id === 'undefined' || typeof args[0].answer !== 'string') {
           console.log('wrong data format received');
           return false;
         }
@@ -214,7 +221,7 @@
         }
 
         // check if answer is correct
-        if (currentAnswer[0].answer === answer) {
+        if (currentAnswer[0].answer === answer.toLowerCase()) {
           console.log('answer is correct');
           return true;
         } else {

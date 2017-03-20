@@ -32,9 +32,13 @@ class AppSession(ApplicationSession):
         counter = 0
         questions = [
                         {'id': '4kjhs34j43', 'question': 'Which package manager is used to install Polymer elements?'},
-                        {'id': '1p43n242jx', 'question': 'Which Polymer Element can be used to visualize a pending state?'},
-                        {'id': '498hff3h3k', 'question': 'last question?'}
-                    ]
+                        {'id': '1p43n242jx', 'question': 'Which Polymer Element can be used to collect user input?'},
+                        {'id': 'j2h4jhn2b4', 'question': 'Which day of week is today?'},
+                        {'id': '9qx3n85mpl', 'question': '1 + 1 = ?'},
+                        {'id': '10eumc4m4m', 'question': 'Which polymer template can be used to repeat html content?'},
+                        {'id': '0v3afl12o5', 'question': 'When was Record Evolution founded?'},
+                        {'id': '498hff3h3k', 'question': 'Is this the last question?'}                   
+                        ]
         while True:
 
             ## PUBLISH an event
@@ -47,8 +51,16 @@ class AppSession(ApplicationSession):
                 yield self.publish('re.meetup.question', questions[0])
             elif counter < 32:
                 yield self.publish('re.meetup.question', questions[1])
-            else:
+            elif counter < 64:
                 yield self.publish('re.meetup.question', questions[2])
+            elif counter < 96:
+                yield self.publish('re.meetup.question', questions[3])
+            elif counter < 128:
+                yield self.publish('re.meetup.question', questions[4])
+            elif counter < 160:
+                yield self.publish('re.meetup.question', questions[5])                
+            else:
+                yield self.publish('re.meetup.question', questions[6])
 
 
 

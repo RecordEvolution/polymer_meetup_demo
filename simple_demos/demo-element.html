@@ -1,0 +1,22 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+
+<dom-module id="demo-element">
+    <template>
+            <p>[[myProperty]]</p>
+            <div style$="background: [[myProperty]]"> this should be in [[myProperty]]</div>
+            <paper-input value="{{myProperty}}"></paper-input>
+    </template>
+
+    <script>
+    Polymer({
+        is: 'demo-element',
+        properties: {
+            myProperty: {
+                type: String,
+                value: 'orange'
+            }
+        }
+    });
+    </script>
+</dom-module>
