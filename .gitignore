@@ -4,3 +4,9 @@ bower_components/**
 build/**
 .crossbar/node.pid
 *node_modules/**
+quiz-client/bower_components
+quiz-client/fonts
+quiz-client/images
+quiz-client/src
+quiz-client/build/**
+how_to_start/README.html

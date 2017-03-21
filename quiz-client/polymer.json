@@ -1,0 +1,15 @@
+{
+  "entrypoint": "index.html",
+  "shell": "main-page.html",
+  "fragments": [
+    "src/custom-transformations/color-animation.html"
+  ],
+  "sources": [
+    "src/**/*",
+    "fonts/**/*",
+    "images/**/*"
+  ],
+    "includeDependencies": [
+    "bower_components/webcomponentsjs/webcomponents-lite.js",
+    "font-face.css"  ]
+}
