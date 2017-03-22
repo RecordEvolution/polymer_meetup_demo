@@ -32,11 +32,11 @@ class AppSession(ApplicationSession):
         counter = 0
         questions = [
                         {'id': '4kjhs34j43', 'question': 'Which package manager is used to install Polymer elements?'},
-                        {'id': '1p43n242jx', 'question': 'Which Polymer Element can be used to collect user input?'},
-                        {'id': 'j2h4jhn2b4', 'question': 'Which day of week is today?'},
                         {'id': '9qx3n85mpl', 'question': '1 + 1 = ?'},
-                        {'id': '10eumc4m4m', 'question': 'Which polymer template can be used to repeat html content?'},
+                        {'id': 'j2h4jhn2b4', 'question': 'Which day of week is today?'},
                         {'id': '0v3afl12o5', 'question': 'When was Record Evolution founded?'},
+                        {'id': '1p43n242jx', 'question': 'Which Polymer Element can be used to collect user input?'},
+                        {'id': '10eumc4m4m', 'question': 'Which polymer template can be used to repeat html content?'},
                         {'id': '498hff3h3k', 'question': 'Is this the last question?'}                   
                         ]
         while True:
@@ -47,21 +47,36 @@ class AppSession(ApplicationSession):
             print("published to 'oncounter' with counter {}".format(counter))
             counter += 1
 
-            if counter < 16:
+            # if counter < 16:
+            #     yield self.publish('re.meetup.question', questions[0])
+            # elif counter < 32:
+            #     yield self.publish('re.meetup.question', questions[1])
+            # elif counter < 64:
+            #     yield self.publish('re.meetup.question', questions[2])
+            # elif counter < 96:
+            #     yield self.publish('re.meetup.question', questions[3])
+            # elif counter < 128:
+            #     yield self.publish('re.meetup.question', questions[4])
+            # elif counter < 160:
+            #     yield self.publish('re.meetup.question', questions[5])                
+            # else:
+            #     yield self.publish('re.meetup.question', questions[6])
+
+
+            if counter < 600:
                 yield self.publish('re.meetup.question', questions[0])
-            elif counter < 32:
+            elif counter < 1200:
                 yield self.publish('re.meetup.question', questions[1])
-            elif counter < 64:
+            elif counter < 1800:
                 yield self.publish('re.meetup.question', questions[2])
-            elif counter < 96:
+            elif counter < 2400:
                 yield self.publish('re.meetup.question', questions[3])
-            elif counter < 128:
+            elif counter < 3000:
                 yield self.publish('re.meetup.question', questions[4])
-            elif counter < 160:
+            elif counter < 3600:
                 yield self.publish('re.meetup.question', questions[5])                
             else:
                 yield self.publish('re.meetup.question', questions[6])
-
 
 
             ## CALL a remote procedure
@@ -75,7 +90,7 @@ class AppSession(ApplicationSession):
                 # if e.error != 'wamp.error.no_such_procedure':
                 #     raise e
 
-            yield sleep(2)
+            yield sleep(1)
 
 if __name__ == '__main__':
    from autobahn.twisted.wamp import ApplicationRunner
