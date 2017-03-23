@@ -36,18 +36,25 @@
         margin-top: 20px;
       }
 
+      #readme {
+        margin-left: 90px;
+      }
+
+      #slides {
+        margin-left: 10px;
+      }
+
       a {
-        margin-left: 140px;
         color: #ffbe2c;
-        font-weight: 100;
+        font-weight: 300;
       }
 
       a:link {
-          text-decoration: none;
+        text-decoration: none;
       }
 
       a:visited {
-          text-decoration: none;
+        text-decoration: none;
       }
 
       a:hover {
@@ -74,7 +81,10 @@
         <div class="flex"> </div>
 
         <div class="vertical layout">
-          <div> <a href="/how_to_start/README.html">Readme</a> </div>
+          <div class="layout horizontal"> 
+            <a id="readme" href="/how_to_start/README.html">Readme</a> 
+            <a id="slides" href="/images/index.html">Slides</a>
+          </div>
 
           <iron-image src="../../images/RE_Logo_2016-Blau-negativ-01.svg" style="width: 200px; height: 40px; margin-top: 15px; margin-right: 50px;"></iron-image>
         </div>

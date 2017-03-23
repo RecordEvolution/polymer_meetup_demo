@@ -66,5 +66,5 @@ session.publish('re.meetup.answer', [answerObject]);
 
 ## Start developing
 
-Start by creating an index.html where you need to import the Polymer library. Then [build your own custom element](https://www.polymer-project.org/1.0/start/first-element/step-2) where you include the `cb-connection` element. Your application should display the questions we send and should be able to submit your answers. The [polymer element catalog](https://elements.polymer-project.org/) provides a lot of useful elements you can use, e.g. `paper-input` or `paper-button`. 
+Start by creating an index.html where you need to import the Polymer library. Then [build your own custom element](https://www.polymer-project.org/1.0/start/first-element/step-2) where you include the `cb-connection` element. Your application should display the questions we send and should be able to submit your answers. [webcomponents.org](https://www.webcomponents.org/) provides a lot of useful elements you can use, e.g. `paper-input` or `paper-button`. 
 
