@@ -1,25 +1,20 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="demo-element.html">
 
 <dom-module id="demo-repeater">
   <template>
-    <p>[[myProperty]]</p>
 
     <template is="dom-repeat" items="[[myArray]]">
-        <div style$="background: [[myProperty]]"> 
-          [[item]]. item, this should be in [[myProperty]]
-        </div>
+      <div> element in [[item]]</div>
+      <demo-element my-property=[[item]]></demo-element>
     </template>
-    <paper-input value="{{myProperty}}"></paper-input>
+
   </template>
   <script>
   Polymer({
     is: 'demo-repeater',
     properties: {
-      myProperty: {
-        type: String,
-        value: 'orange'
-      },
       myArray: {
         type: Array,
         value: function() {

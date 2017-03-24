@@ -1,0 +1,29 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+
+<dom-module id="my-element">
+
+    <template>
+        <style>
+        div {
+            background-color: yellow;
+        }
+        </style>
+        <div>
+            <h2>Hello World</h2>
+            <content></content>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'my-element',
+            properties: {
+                myProperty: {
+                    type: String,
+                    value: 'Some String'
+                }
+            }
+        });
+   </script>
+</dom-module>

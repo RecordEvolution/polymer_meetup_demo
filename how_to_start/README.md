@@ -7,7 +7,7 @@ Build a quiz client, which connects to our quiz channel and receives questions. 
 
 Create a new folder for your project. `cd` into it and install bower, if you haven't already done that.
 ```
-$ npm install -g bower
+$ sudo npm install -g bower
 ``` 
 Create a bower.json file which handles your package dependencies
 ```
@@ -38,7 +38,7 @@ $ python -m SimpleHTTPServer
 At [localhost:8000/bower_components/cb-connect/](localhost:8000/bower_components/cb-connect/) you can get a documentation of the cb-connect element.
 If you add this element to your project you need to set the websocket uri (wsuri property) and the realm.
 ```html
-<cb-connect wsuri="ws://192.168.0.121:8099/ws" realm="polymer_meetup"></cb-connect>
+<cb-connect wsuri="ws://192.168.0.121:8099/ws" realm="polymer_meetup" on-crossbar-connected="getSessionObject"></cb-connect>
 ```
 
 This configuration should let you connect to our quiz channel.
