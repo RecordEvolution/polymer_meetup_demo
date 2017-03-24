@@ -1,0 +1,23 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="binding-example.html">
+
+<dom-module id="repeat-example">
+  <template>
+
+    <template is="dom-repeat" items="[[myArray]]">
+      <div> element in [[item]]</div>
+      <binding-example my-property=[[item]]></binding-example>
+    </template>
+
+  </template>
+  <script>
+  Polymer({
+    is: 'repeat-example',
+    properties: {
+      myArray: {
+        type: Array
+      }
+    }
+  });
+  </script>
+</dom-module>

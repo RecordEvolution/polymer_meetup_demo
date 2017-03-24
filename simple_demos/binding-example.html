@@ -1,7 +1,8 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 
-<dom-module id="demo-element">
+<dom-module id="binding-example">
+
     <template>
             <p>[[myProperty]]</p>
             <div style$="background-color: [[myProperty]]"> this should be in [[myProperty]]</div>
@@ -10,7 +11,7 @@
 
     <script>
     Polymer({
-        is: 'demo-element',
+        is: 'binding-example',
         properties: {
             myProperty: {
                 type: String,
