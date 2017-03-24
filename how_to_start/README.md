@@ -66,5 +66,24 @@ session.publish('re.meetup.answer', [answerObject]);
 
 ## Start developing
 
-Start by creating an index.html where you need to import the Polymer library. Then [build your own custom element](https://www.polymer-project.org/1.0/start/first-element/step-2) where you include the `cb-connection` element. Your application should display the questions we send and should be able to submit your answers. [webcomponents.org](https://www.webcomponents.org/) provides a lot of useful elements you can use, e.g. `paper-input` or `paper-button`. 
+Start by creating an index.html where you need to import the polyfills. Then [build your own custom element](https://www.polymer-project.org/1.0/start/first-element/step-2), e.g <quiz-client>, which contains your application. Your index.html could like this
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>quiz-client</title>
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="quiz-client.html">
+  </head>
+  <body>
+    <quiz-client></quiz-client>
+  </body>
+</html>
+``` 
+
+In your quiz-app element you include the `cb-connection` element, in order to receive questions and submit answers. [webcomponents.org](https://www.webcomponents.org/) provides a lot of useful elements you can use, e.g. `paper-input` or `paper-button`. 
 
