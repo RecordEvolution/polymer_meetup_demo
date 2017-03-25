@@ -1,38 +1,24 @@
-# \<quiz-app\>
+# Polymer Meetup Quiz App
 
 
 
-## Install the Polymer-CLI
-
-First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your application locally.
-
-## Viewing Your Application
+## Init everything
 
 ```
-$ polymer serve
+$ ./init.sh
 ```
 
-## Building Your Application
+## Run the application
 
+Serve the overview app
 ```
-$ polymer build
+$ npm run serve
 ```
-
-This will create a `build/` folder with `bundled/` and `unbundled/` sub-folders
-containing a bundled (Vulcanized) and unbundled builds, both run through HTML,
-CSS, and JS optimizers.
-
-You can serve the built versions by giving `polymer serve` a folder to serve
-from:
-
+Serve the quiz client
 ```
-$ polymer serve build/bundled
+$ npm run serve_quiz_client
 ```
-
-## Running Tests
-
+Publish questions
 ```
-$ polymer test
+$ npm run publisher
 ```
-
-Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.

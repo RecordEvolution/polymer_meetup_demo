@@ -53,11 +53,11 @@ function onQuestion(args) {
 session.subscribe('re.meetup.question', onQuestion);
 ```
 
-You will then receive a question object, which contains the question and an id. Then you can send your answer by publishing an answer object to the topic `re.meetup.answer`, which should have the following structure `{user: 'someone', answer: 'answer to the question', id='1234'}`. The id should match the id collected from the question object and you should choose a unique user name.
+You will then receive a question object, which contains the question and an id. Then you can send your answer by publishing an answer object to the topic `re.meetup.answer`, which should have the following structure `{user: 'someone', answer: 'answer to the question', id: '1234'}`. The id should match the id collected from the question object and you should choose a unique user name.
 
 ```javascript
 // PUBLISH an event
-var answerObject = {user: 'someone', answer: 'answer to the question', id='1234'};
+var answerObject = {user: 'someone', answer: 'answer to the question', id: '1234'};
 session.publish('re.meetup.answer', [answerObject]);
 ```
 #### Further reading:
