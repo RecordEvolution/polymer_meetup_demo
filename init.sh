@@ -2,9 +2,10 @@
 bower install
 npm install
 polymer build
-ln -s bower_components quiz-client/bower_components
-ln -s fonts quiz-client/fonts
-ln -s images quiz-client/images
-ln -s src quiz-client/src
+ln -s $PWD/bower_components $PWD/quiz-client/bower_components
+ln -s $PWD/fonts $PWD/quiz-client/fonts
+ln -s $PWD/images $PWD/quiz-client/images
+ln -s $PWD/src $PWD/quiz-client/src
+
 cd quiz-client
 polymer build
